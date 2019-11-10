@@ -4,6 +4,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringRunner;
 import org.apache.camel.test.spring.MockEndpoints;
+import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.camel.ProducerTemplate;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
@@ -33,6 +36,17 @@ public class JfdiRouteTest {
 
     @EndpointInject("mock:direct:blah")
     private MockEndpoint blah;
+
+    @Before
+    public void clear() throws IOException {
+        Path out = Paths.get("target/out");
+        if(!Files.exists(out)) {
+            Files.createDirectory(out);
+        }
+        Files.walk(out)
+                .map(Path::toFile)
+                .forEach(File::delete);
+    }
 
     @Test
     public void execute() {
