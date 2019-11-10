@@ -22,7 +22,7 @@ public class JfdiRouteTest {
     @Autowired
     private ProducerTemplate producer;
 
-    @EndpointInject("mock:direct:agg")
+    @EndpointInject("mock:direct:jfdi")
     private MockEndpoint agg;
 
     @EndpointInject("mock:direct:blah")

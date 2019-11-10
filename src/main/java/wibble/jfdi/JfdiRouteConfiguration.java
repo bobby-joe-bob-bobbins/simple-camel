@@ -16,22 +16,11 @@ public class JfdiRouteConfiguration {
             @Override
             public void configure() throws Exception {
                 from("direct:jfdi")
-                        .to("direct:agg")
-                        .to("direct:blah");
-            }
-        };
-    }
-
-    @Bean
-    public RouteBuilder AggRoute() {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:agg")
-                        .log("get in: ${body}")
                         .aggregate(constant(true), new GroupedBodyAggregationStrategy())
                         .completionSize(5)
-                        .log("aggregated : ${body}");
+                        .log("aggregated ${header.CamelAggregatedSize} messages as a result of a ${header.CamelAggregatedCompletedBy} trigger")
+                        .to("direct:blah")
+                        .end();
             }
         };
     }
@@ -42,7 +31,6 @@ public class JfdiRouteConfiguration {
             @Override
             public void configure() throws Exception {
                 from("direct:blah")
-                        .log("yeah man: ${body}")
                         .convertBodyTo(String.class)
                         .to("file://target/out");
             }
