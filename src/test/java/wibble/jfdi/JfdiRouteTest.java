@@ -49,7 +49,7 @@ public class JfdiRouteTest {
     }
 
     @Test
-    public void execute() {
+    public void testThatMessagesAreAggregatedAsExpected() {
 
         for (int i = 0; i < 20; i++) {
             producer.sendBody("direct:jfdi", i);
